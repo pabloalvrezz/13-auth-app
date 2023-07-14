@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 const comprobarEmail: string = '/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i'
 
@@ -11,8 +12,8 @@ const comprobarEmail: string = '/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-
 
 export class LoginPageComponent {
 
-
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService)
 
   public myForm: FormGroup = this.fb.group(
     {
@@ -22,8 +23,10 @@ export class LoginPageComponent {
 
 
   public login() {
-    console.log(this.myForm.value);
-
-    this.myForm.reset()
+    const { email, password } = this.myForm.value
+    this.authService.login(email, password)
+      .subscribe(data => {
+        console.log(data)
+      })
   }
 }
