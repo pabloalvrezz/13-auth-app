@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2'
 
 const comprobarEmail: string = '/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i'
 
@@ -24,9 +25,13 @@ export class LoginPageComponent {
 
   public login() {
     const { email, password } = this.myForm.value
+
     this.authService.login(email, password)
-      .subscribe(data => {
-        console.log(data)
+      .subscribe({
+        next: () => console.log('Todo correcto'),
+        error: (message) => {
+          Swal.fire('Error', message, 'error')
+        }
       })
   }
 }
